@@ -11,7 +11,7 @@ import java.util.*;
 public class Student {
     String name;
     String registrationNumber;
-    Map<String, Integer> bulletin;
+    Map<String, Integer> bulletin = new HashMap<>();
     /**
      * Creates a new Student.
      *
@@ -42,7 +42,8 @@ public class Student {
      * @return the score if found, <code>OptionalInt#empty()</code> otherwise.
      */
     public OptionalInt getScore(String course) {
-        return null;
+        Integer nullableScore = bulletin.get(course);
+        return nullableScore != null ? OptionalInt.of(nullableScore) : OptionalInt.empty();
     }
 
     /**
@@ -63,7 +64,10 @@ public class Student {
      * @return the best scored course or <code>Optional#empty()</code> if there is none.
      */
     public Optional<String> bestCourse() {
-        return null;
+        return bulletin.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+            .map(Map.Entry::getKey)
+            .findFirst();
     }
 
     /**
@@ -72,7 +76,12 @@ public class Student {
      * @return the highest score or 0 if there is none.
      */
     public int bestScore() {
-        return 0;
+        if (bulletin.isEmpty())
+            return 0;
+        return bulletin.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+            .map(Map.Entry::getValue)
+            .findFirst();
     }
 
     /**
