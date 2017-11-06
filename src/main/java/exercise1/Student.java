@@ -17,9 +17,9 @@ public class Student {
      *
      * @throws NullPointerException if one of the parameter is null.
      */
-    public Student(String name, String registrationNumber) {
-        this.name = name;
-        this.registrationNumber = registrationNumber;
+    public Student (String name, String registrationNumber) {
+        this.name = Objects.requireNonNull(name, "Erreur : le nom ne peut être nul !");
+        this.registrationNumber = Objects.requireNonNull(registrationNumber, "Erreur : Le ezfjv ne peut être nul !");
     }
 
     /**
@@ -30,7 +30,10 @@ public class Student {
      * @throws IllegalArgumentException if the score is less than 0 or greater than 20.
      */
     public void setScore(String course, int score) {
-        bulletin.put(course, score);
+        if (score >= 0 && score <= 20)
+            bulletin.put(Objects.requireNonNull(course, "Erreur: Le cours ne peut être nul"), score);
+        else
+            throw new IllegalArgumentException("Erreur : Le score doit être compris entre 0 et 20 !");
     }
 
     /**
@@ -39,7 +42,7 @@ public class Student {
      * @return the score if found, <code>OptionalInt#empty()</code> otherwise.
      */
     public OptionalInt getScore(String course) {
-        return OptionalInt.of(bulletin.get(course));
+        return null;
     }
 
     /**
@@ -48,8 +51,10 @@ public class Student {
      * @return the average score or 0 if there is none.
      */
     public double averageScore() {
-        // for (Integer note : bulletin)
-        return 0;
+        return bulletin.values().stream()
+            .mapToInt(Integer::intValue)
+            .average()
+            .orElse(0.0);
     }
 
     /**
@@ -57,7 +62,9 @@ public class Student {
      *
      * @return the best scored course or <code>Optional#empty()</code> if there is none.
      */
-    public Optional<String> bestCourse() { return null; }
+    public Optional<String> bestCourse() {
+        return null;
+    }
 
     /**
      * Returns the highest score.
