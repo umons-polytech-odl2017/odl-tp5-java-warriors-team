@@ -1,6 +1,7 @@
 package exercise1;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents a student.
@@ -76,12 +77,11 @@ public class Student {
      * @return the highest score or 0 if there is none.
      */
     public int bestScore() {
-        if (bulletin.isEmpty())
-            return 0;
         return bulletin.entrySet().stream()
             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
             .map(Map.Entry::getValue)
-            .findFirst();
+            .findFirst()
+            .orElse(0);
     }
 
     /**
@@ -89,7 +89,8 @@ public class Student {
      * A course is considered as passed if its score is higher than 12.
      */
     public Set<String> failedCourses() {
-        return null;
+        return bulletin.entrySet().stream()
+            .filter( < 12);
     }
 
     /**
@@ -102,7 +103,11 @@ public class Student {
     /**
      * Returns the set of courses for which the student has received a score, sorted by course name.
      */
-    public Set<String> attendedCourses() { return null; }
+    public Set<String> attendedCourses() {
+        return bulletin.keySet().stream()
+            .sorted()
+            .collect(Collectors.toSet());
+    }
 
     public String getName() {
         return name;

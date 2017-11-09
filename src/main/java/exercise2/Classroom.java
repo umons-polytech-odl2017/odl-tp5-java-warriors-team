@@ -3,12 +3,15 @@ package exercise2;
 import exercise1.DuplicateStudentException;
 import exercise1.Student;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * A classroom gathers many distinct students.
  */
 public class Classroom {
+    private Set<Student> students = new HashSet<>();
     /**
      * Adds a student to this classroom.
      *
@@ -16,7 +19,9 @@ public class Classroom {
      * @throws DuplicateStudentException if the given student is already part of the classroom.
      */
     public void addStudent(Student student) {
-
+        Objects.requireNonNull(student, "erreur");
+        if (!students.add(student)) // la fonction add() retourne faux si l'élément existait déjà
+            throw new DuplicateStudentException(student.getRegistrationNumber());
     }
 
     /**
@@ -25,14 +30,17 @@ public class Classroom {
      * @return the average score of the students or 0 if there is none.
      */
     public double averageScore() {
-        return 0;
+        return students.stream()
+            .mapToDouble(Student::averageScore)
+            .average()
+            .orElse(0.0);
     }
 
     /**
      * Returns the number of students that are part of this classroom.
      */
     public int countStudents() {
-        return 0;
+        return students.size();
     }
 
     /**
